@@ -1,180 +1,190 @@
+# 🚀 Sample Flask Web Project Deployment (Docker + Proxmox)
+
+This project is a **simple and responsive two-page website** built using **HTML, CSS, and Python Flask**, designed to demonstrate **containerized deployment using Docker** on a **Proxmox Virtual Machine**.
+
+> 🔥 While the website content is basic, the main objective of this project is to practice cloud-native deployment using virtualization and containerization technologies.
 
 ---
 
-# **CI/CD Deployment Process with Jenkins, Docker Compose, GitHub, Webhook, and ngrok**
+## 🌐 Website Overview
 
-This guide explains how to set up a CI/CD pipeline using **Jenkins**, **Docker Compose**, **GitHub**, **ngrok**, and how to configure the deployment process for automatic updates.
+- **Welcome Page**: Beautiful landing page with project intro and animation.
+- **About Page**: Information about the developers, project purpose, and CV download links.
+- **Responsive Design**: Mobile and desktop-friendly layout with smooth animations.
+- **CV Download**: Each team member’s CV is downloadable as a PDF.
 
 ---
 
-### **1. Install and Set Up Jenkins**
+## 🧑‍💻 Project Members
 
-If you haven’t already installed Jenkins, follow these steps:
+- **Hassan Ali**
+- **Fahad Sajid**
 
-1. **Install Jenkins on your server** (you can use Ubuntu/Kali Linux as your server):
+CVs are available to download via the [About Page](http://localhost:5000/about).
+
+---
+
+## ⚙️ Technologies Used
+
+- Python 3.x
+- Flask
+- HTML5 / CSS3
+- Google Fonts
+- Docker
+- Proxmox (for VM creation)
+
+---
+
+## 📦 Folder Structure
+
+```
+project/
+│
+├── app.py                  # Flask application
+├── Dockerfile              # Docker build file
+├── requirements.txt        # Python dependencies
+├── templates/              # HTML templates
+│   ├── welcome.html
+│   └── about.html
+├── static/                 # Static files (CSS, PDFs)
+│   ├── style.css
+│   ├── hassan_cv.pdf
+│   └── fahad_cv.pdf
+├── README.md               # This file
+```
+
+---
+
+## 📸 Screenshots (Optional)
+
+| Welcome Page | About Page |
+|--------------|------------|
+| ![Welcome Screenshot](screenshots/welcome.png) | ![About Screenshot](screenshots/about.png) |
+
+> You can upload screenshots and link them here.
+
+---
+
+## 🧱 How It Works
+
+We created a virtual machine inside a **Proxmox Cluster**, installed **Docker**, built the Flask app into a Docker container, and ran it as a service on the VM.
+
+This mimics real-world cloud-native deployment and helps practice DevOps concepts.
+
+---
+
+
+### 📦 Docker Usage in This Project
+
+In this project, Docker is used to **containerize** the Flask web application.
+
+- A **Dockerfile** is created that defines the environment, dependencies, and instructions needed to run the app.
+- This Docker image ensures that the application can run reliably in any environment, regardless of local machine differences.
+- The built Docker container is deployed inside a **virtual machine hosted on a Proxmox Cluster**.
+
+---
+
+### 🐳 How Docker is Used
+
+1. **Dockerfile** defines:
+   - The base image (`python:3.10-slim` or similar).
+   - Copying application files.
+   - Installing dependencies from `requirements.txt`.
+   - Running the Flask app.
+
+2. **Build Docker Image**:
+
    ```bash
-   sudo apt update
-   sudo apt install openjdk-11-jdk
-   sudo apt install jenkins
-   sudo systemctl start jenkins
-   sudo systemctl enable jenkins
+   docker build -t flask-web-project .
    ```
 
-2. **Access Jenkins** on `localhost:8080` or configure it to use your system's IP if accessing from other devices in your network (details are in the initial setup).
+3. **Run Docker Container**:
 
-3. **Install Required Plugins**:
-   - Go to **Manage Jenkins** → **Manage Plugins**.
-   - Install the following plugins:
-     - Git Plugin
-     - Docker Pipeline
-     - GitHub Integration Plugin
-     - Pipeline Plugin
-
----
-
-### **2. Install Docker and Docker Compose**
-
-Jenkins needs Docker to build and deploy containers. Install Docker and Docker Compose on your Jenkins server:
-
-1. **Install Docker**:
    ```bash
-   sudo apt update
-   sudo apt install docker.io
-   sudo systemctl enable docker
-   sudo systemctl start docker
+   docker run -d -p 5000:5000 flask-web-project
    ```
 
-2. **Install Docker Compose**:
-   ```bash
-   sudo apt install docker-compose
-   ```
+4. The app becomes available on the VM's IP address at port `5000`.
 
 ---
 
-### **3. Set Up GitHub Repository**
+### 🚀 Why Docker is Important in This Project
 
-1. **Create a GitHub repository** for your project if you haven't already.
+- **Consistency**: Docker ensures that the app runs the same way everywhere — no "it works on my machine" issues.
+- **Portability**: The app can be moved across VMs, servers, or cloud providers easily by shipping the Docker image.
+- **Isolation**: The Flask app runs isolated from the host system and other apps, avoiding conflicts.
+- **Scalability**: Using Docker makes it easier to scale up (running multiple containers) if needed in the future.
+- **Efficiency**: Containers are lightweight compared to full virtual machines, reducing resource usage and deployment time.
+- **Professional Practice**: Using Docker is a real-world industry standard, making this deployment more aligned with DevOps and cloud-native practices.
 
-2. **Push Your Code to GitHub**.
 
-3. **Generate a GitHub Personal Access Token (PAT)** with `repo` and `admin:repo_hook` permissions (to interact with Jenkins). [Steps to generate PAT](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token).
 
-4. **Add GitHub credentials to Jenkins**:
-   - Go to **Manage Jenkins** → **Manage Credentials** → **Global** → **Add Credentials**.
-   - Choose **Kind** as **Username with Password**.
-   - Enter **GitHub Username** and **GitHub PAT**.
+
+
+---
+## 🚀 Setup Instructions
+
+### 1. 🔧 Clone the Repository
+
+```bash
+git clone https://github.com/hassanali167/Simple-Web-page-dep-with-docker
+```
+
+### 2. 🐍 Set up a Python Virtual Environment (Optional for local testing)
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python app.py
+```
+
+### 3. 🐳 Run with Docker (Preferred)
+
+#### Step 1: Build the Docker image
+
+```bash
+docker build -t flask-web-project .
+```
+
+#### Step 2: Run the Docker container
+
+```bash
+docker run -d -p 5000:5000 flask-web-project
+```
+
+Access the web app at:  
+📍 `http://<your_vm_ip>:5000`
 
 ---
 
-### **4. Configure Jenkins Job for CI/CD Pipeline**
+## 📡 Deployment Notes
 
-1. **Create a Jenkins Pipeline Job**:
-   - Go to **New Item** → **Pipeline** → **Enter the Job Name** and click **OK**.
-   
-2. **Set GitHub Repository in Jenkins Pipeline**:
-   - Under **Pipeline Definition**, select **Pipeline script from SCM**.
-   - Set **SCM** to **Git**, and enter your GitHub repository URL.
-   - Use the **GitHub credentials** you created earlier.
-   
-3. **Create a Jenkinsfile in your GitHub repository**:
-   - The Jenkinsfile defines the steps for building and deploying your application. Make sure it's present in the root of your repository.
-
-
-### **4. Set Up Webhook for GitHub to Trigger Jenkins Build**
-
-1. **Create Webhook on GitHub**:
-   - Go to your GitHub repository → **Settings** → **Webhooks** → **Add Webhook**.
-   - In **Payload URL**, enter:
-     ```bash
-     http://YOUR_JENKINS_IP:8080/github-webhook/
-     ```
-     (If Jenkins is local, use **ngrok** to expose the URL, or configure port forwarding if it's hosted on a server).
-   - Set **Content type** to `application/json`.
-   - Choose the event as **Just the push event**.
-   
-2. **Test the webhook**: Push a new commit to your GitHub repository and verify that Jenkins triggers a build.
+- The project is deployed inside a Docker container on a VM hosted in a **Proxmox cluster**.
+- Make sure Docker is installed and running on your VM.
+- CV files are placed in the `static/` folder to enable direct download via the web app.
 
 ---
 
-### **6. Use ngrok for Exposing Jenkins to GitHub Webhook (Optional for Local Setup)**
+## 🧠 Future Improvements (Optional Ideas)
 
-If Jenkins is running locally and GitHub can’t directly reach it, use **ngrok** to tunnel the connection:
-
-1. **Install ngrok**:
-   ```bash
-   sudo apt install ngrok
-   ```
-
-2. **Expose Jenkins with ngrok**:
-   ```bash
-   ngrok http 8080
-   ```
-add your authentication token of ngrok 
-   ngrok will provide a public URL like `https://abcd.ngrok.io`.
-
-3. **Update GitHub Webhook**:
-   - Replace the Payload URL in your GitHub webhook with the **ngrok URL**:
-     ```bash
-     https://abcd.ngrok.io/github-webhook/
-     ```
+- Add a contact form with Flask backend
+- Use Flask Blueprints for larger projects
+- Deploy using CI/CD pipeline (e.g., GitHub Actions + Docker Hub)
+- Host on a cloud platform (like AWS EC2, GCP, etc.)
 
 ---
 
-### **7. Configure Docker for Deployment on a Server**
+## 📧 Contact / Credits
 
-To deploy using **Docker Compose**:
+Developed by:
 
-2. **Deploy using Docker Compose in Jenkins**:
-   - In your Jenkinsfile, use the command `docker-compose up -d` to start the application in detached mode.
-
----
-
-### **8. Monitor Jenkins Build Logs and Deployment Status**
-
-1. **Access Jenkins Dashboard**: After pushing code or triggering a build manually, you can monitor the build status and logs through the **Jenkins Dashboard**.
-   
-2. **Troubleshooting**: Check the console output of each Jenkins build for any errors related to the Docker build or deployment process.
+- [Hassan Ali](mailto:hassanali1335@outlook.com)  
+- [Fahad Sajid](mailto:fahadsajid492@gmail.com)
 
 ---
 
-### **9. Automate the Deployment Process**
+## 📜 License
 
-Once the pipeline is set up:
-
-- Any **push to GitHub** triggers the webhook and the Jenkins pipeline.
-- Jenkins checks the code, builds the Docker image, and deploys it using Docker Compose.
-
----
-
-### **10. (Optional) Expose Jenkins Publicly for Remote Access**
-
-If you want to access Jenkins from outside your network:
-
-1. **Configure port forwarding** on your router to forward port `8080` to the machine where Jenkins is running.
-   
-2. **Access Jenkins from public IP**: Use the external IP of your machine:
-   ```bash
-   http://<public-ip>:8080
-   ```
-
----
-
-### **Summary**
-
-With the above steps:
-
-- **GitHub** is the source repository for your application code.
-- **Jenkins** automates the build and deployment pipeline using **Docker Compose**.
-- **Webhook** triggers Jenkins builds whenever you push new code to GitHub.
-- **ngrok** is used for exposing Jenkins if it's running locally.
-- **Docker** is used for deploying the application to the server.
-
-Now, you have a fully automated **CI/CD pipeline** that deploys your code to production using Docker Compose, triggered by code pushes to GitHub.
-
-
-
-
-
-
-process flow:
-code ----> github---->ngrok-webhook-------jenkins----------docker-contanier--------server
+This project is for educational purposes only.  
+Feel free to fork and modify for your own learning!
