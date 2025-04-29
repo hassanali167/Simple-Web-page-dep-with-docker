@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #74ebd5 0%, #acb6e5 100%);
+    color: #333;
+}
+
+.container {
+    width: 90%;
+    margin: auto;
+    overflow: hidden;
+    padding: 20px;
+}
+
+h1, h2 {
+    text-align: center;
+    margin-top: 30px;
+    animation: fadeInDown 1s ease-in-out;
+}
+
+p {
+    text-align: center;
+    font-size: 1.2em;
+    margin: 20px 0;
+}
+
+a.button {
+    display: inline-block;
+    margin: 15px;
+    padding: 12px 25px;
+    background: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    transition: background 0.3s ease;
+    font-weight: 600;
+}
+
+a.button:hover {
+    background: #45a049;
+}
+
+.team {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+.card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    margin: 20px;
+    padding: 20px;
+    width: 280px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.download-section {
+    text-align: center;
+    margin-top: 40px;
+}
+
+footer {
+    background: #222;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 50px;
+    font-size: 0.9em;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .team {
+        flex-direction: column;
+        align-items: center;
+    }
+}
